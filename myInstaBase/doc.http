@@ -1,0 +1,73 @@
+### Registration
+
+@GET http://127.0.0.1:8000/auth HTTP/1.1
+
+
+
+POST http://127.0.0.1:8000/auth/registration/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "username":"Snake",
+    "password1":"qwe+12345",
+    "password2":"qwe+12345",
+    "email":"snake@mail.ru"
+}
+
+#
+#
+
+
+### Login
+
+POST http://127.0.0.1:8000/auth/login/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "username":"Cat",
+    "password":"qwe+12345"
+}
+
+
+### Change Password
+PATCH  http://127.0.0.1:8000/api/change-password/ HTTP/1.1
+Content-Type: application/json
+Authorization: Token 386759cc769d1e9bc6db0d4fa57982c03c1e3159
+
+{
+  "old_password":"qwe+12346",
+  "new_password":"qwe+12345"
+}
+
+
+
+
+### GetInfo
+GET http://127.0.0.1:8000/api/video/1/ HTTP/1.1
+Content-Type: application/json
+Authorization: Token 9f713693657ca3a92d9fbc899ab97b7aeec39f3a
+
+
+### GetInfo cooments
+GET http://127.0.0.1:8000/api/comments/?video=1 HTTP/1.1
+Content-Type: application/json
+Authorization: Token 2095a1359de2a30a46754097bbc088a0e6584a6a
+
+### CheckUser
+GET http://127.0.0.1:8000/api/users/ HTTP/1.1
+Content-Type: application/json
+Authorization: Token 9f713693657ca3a92d9fbc899ab97b7aeec39f3a
+
+
+
+### CheckUser
+GET http://127.0.0.1:8000/api/users/?username=Cat HTTP/1.1
+Content-Type: application/json
+Authorization: Token 386759cc769d1e9bc6db0d4fa57982c03c1e3159
+
+
+### getUserID
+POST  http://127.0.0.1:8000/user/ HTTP/1.1
+
+Authorization: 9f713693657ca3a92d9fbc899ab97b7aeec39f3a
+ 
