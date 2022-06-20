@@ -38,6 +38,7 @@ from rest_framework.response import Response
 
 from rest_framework.generics import GenericAPIView, RetrieveUpdateAPIView
 from django.contrib.auth import get_user_model
+import time
 
 global userData
 
@@ -122,6 +123,7 @@ def vk_userDatacallback(request):
     params = urllib.parse.urlencode(request.GET)
     global userData
     params = userData
+    print('PARAMS', params)
     return redirect(f'http://localhost:3000/retrieveName/{params}')
 
 
@@ -131,12 +133,16 @@ from allauth.account.signals import user_logged_in
 def user_logged_in_receiver(request, user, **kwargs):
     global userData
     userData = user
-
     testUserExist = User.objects.filter(username=user)
-    if len(testUserExist):
-        isAuthor = Author.objects.filter(name=User.objects.get(username=user).id)
+    print('222222222222222222', testUserExist)
+    print('333333333333333333', user.username[:8])
+    if len(testUserExist) and user.username[:8] !='empty165':
+        print('проверить. дважды создается юзер. соц акк и обычная регистрация')
+        isAuthor = Author.objects.filter(name=User.objects.get(username=user).id) 
+        print('444444444444444', isAuthor) 
         if not len(isAuthor):
-            Author.objects.create(name=User.objects.get(username=user), socialAcc=True)
+            print('11111111111111', user)
+            Author.objects.create(name=User.objects.get(username=user), socialAcc=True, phone=time.time())
 
 user_logged_in.connect(user_logged_in_receiver, sender=User)
 

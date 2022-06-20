@@ -13,9 +13,9 @@ from rest_framework import serializers
 
 
 class Author(models.Model):
-    name = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, unique=True)
+    name = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, unique=True) #
     avatar = models.ImageField(upload_to='avatar/', max_length = 100, blank=True)
-    phone = models.CharField(unique=True, blank=True, max_length=20)
+    phone = models.CharField(blank=True, max_length=20, unique=True)  #
     socialAcc = models.BooleanField(default=False, blank=True)
     
 
@@ -25,7 +25,7 @@ class Author(models.Model):
 
 
 class Video(models.Model):
-    title = models.CharField(verbose_name='Name', unique=True, max_length=128)
+    title = models.CharField(verbose_name='Name', unique=True, max_length=128) #
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     video = models.FileField(
         upload_to='video/',
@@ -37,6 +37,8 @@ class Video(models.Model):
     rating = models.IntegerField(default = 0)
     description = models.TextField()
     create_at = models.DateTimeField(auto_now_add=True)
+    archived = models.BooleanField(default=False, blank=True)
+    deleted = models.BooleanField(default=False, blank=True)
     
 
     def like(self):
@@ -80,9 +82,10 @@ class CommentsQuotations(models.Model):
 
 class PrivateRoom(models.Model):
     privateRoomMembers = models.ManyToManyField(User, blank=True)
-    privateChatName = models.CharField(max_length=64, unique=True)
+    privateChatName = models.CharField(max_length=64)
     lastOpenDate = models.DateTimeField(blank=True)
     privateChat = models.BooleanField(default=True, blank=True)
+    name = models.CharField(max_length=64,  blank=True)
 
     # или сюда дату последнего открывания. Если дата раньше ласт логин то сообщения светим 
 
@@ -94,6 +97,7 @@ class PrivateMessage(models.Model):
     text = models.TextField()
     privateRoom = models.ForeignKey(PrivateRoom, on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         return self.text
