@@ -17,6 +17,8 @@ class Author(models.Model):
     avatar = models.ImageField(upload_to='avatar/', max_length = 100, blank=True)
     phone = models.CharField(blank=True, max_length=20, unique=True)  #
     socialAcc = models.BooleanField(default=False, blank=True)
+    isEmailConfirmed = models.BooleanField(default=False, blank=True)
+    isPhoneConformed = models.BooleanField(default=False, blank=True)
     
 
     def __str__(self):

@@ -41,10 +41,53 @@ from django.contrib.auth import get_user_model
 import time
 
 global userData
-
-
-
 userData = {}
+
+
+# mail block
+
+from django.core.mail import send_mail
+
+
+# Блок где мы отправляем емаил автору с подвержающей ссылкой. 
+def emailverify(request):
+    params = urllib.parse.urlencode(request.GET)
+    id=params[3:params.find('&author=')]
+    author=params[(params.find('&author='))+8:params.find('&email=')]
+    emailDirthy=params[(params.find('&email='))+7:]
+    clearEmail =  emailDirthy[0:emailDirthy.find('%40')]+'@'+emailDirthy[(emailDirthy.find('%40'))+3:]
+    link = f'http://127.0.0.1:8000/api/auth/confimation/?id={id}&author={author}&email={clearEmail}&stamp={time.time()}'
+
+    send_mail(
+        subject='Verify email for SLN Connects Co',
+        message='Good day.\n You have received this email because someone used this email address while registration at SLN Connects WebSite\n'
+        ' If it is you and you would like to verify your email address - please click on attached link below\n'
+        f' Link is: {link}',
+        from_email='slnconnects@mail.ru',
+        recipient_list=[clearEmail],
+        fail_silently=False,
+    )
+
+    return HttpResponse({'Confirmation email was sent'}, status = 200)
+
+# Блок где мы получаем по апи подтверждающий клик. и если если автор и юзер бьются  - то проставляем что емаил подтвержден. 
+def emailconfirm(request):
+    params = urllib.parse.urlencode(request.GET)
+    id=params[3:params.find('&author=')]
+    author=params[(params.find('&author='))+8:params.find('&email=')]
+    emailDirthy=params[(params.find('&email='))+7:(params.find('&stamp='))]
+    clearEmail =  emailDirthy[0:emailDirthy.find('%40')]+'@'+emailDirthy[(emailDirthy.find('%40'))+3:]
+    timestamp=params[(params.find('&stamp='))+7:]
+    checkUserId = User.objects.get(id=id)
+    checkAuthorId = Author.objects.get(id=author)
+    if checkUserId and checkAuthorId:
+        checkAuthorId.isEmailConfirmed = True
+        checkAuthorId.save()
+
+
+
+    return HttpResponse({'Thank you for confirmation email'}, status = 200)
+
 
 
 

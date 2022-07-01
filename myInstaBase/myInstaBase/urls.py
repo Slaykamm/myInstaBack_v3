@@ -50,6 +50,8 @@ urlpatterns = [
     path('api/auth/vk/login', vk_views.oauth2_login, name='vk_login'),
     path('api/auth/vk/login/callback', vk_callback, name='vk_callback'),
     path('api/auth/vk/login/retrieve/', vk_userDatacallback, name='vk_userDatacallback'),
+    path('api/auth/emailverify/', emailverify, name='emailverify'),
+    path('api/auth/confimation/', emailconfirm, name='emailconfirm'),
    # path('user/', UserDetailsView.as_view(), name='rest_user_details'),
 ]
 
