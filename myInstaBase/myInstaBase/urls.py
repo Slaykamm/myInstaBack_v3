@@ -52,6 +52,7 @@ urlpatterns = [
     path('api/auth/vk/login/retrieve/', vk_userDatacallback, name='vk_userDatacallback'),
     path('api/auth/emailverify/', emailverify, name='emailverify'),
     path('api/auth/confimation/', emailconfirm, name='emailconfirm'),
+    path('', include('sendOtp.urls'))
    # path('user/', UserDetailsView.as_view(), name='rest_user_details'),
 ]
 

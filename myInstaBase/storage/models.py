@@ -19,7 +19,7 @@ class Author(models.Model):
     socialAcc = models.BooleanField(default=False, blank=True)
     isEmailConfirmed = models.BooleanField(default=False, blank=True)
     isPhoneConformed = models.BooleanField(default=False, blank=True)
-    
+    phoneConfirmationCode = models.IntegerField(default=0, blank=True)   
 
     def __str__(self):
         return self.phone
