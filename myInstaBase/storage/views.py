@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from rest_framework.reverse import reverse
 from venv import create
 from django.shortcuts import redirect, render
@@ -47,6 +48,19 @@ userData = {}
 # mail block
 
 from django.core.mail import send_mail
+
+
+from django.views import View
+from .tasks import printer, hello
+import math
+
+
+class IndexView(View):
+    def get(self, request):
+        printer.delay(10)
+        hello.delay()
+        return HttpResponse('Hello!')
+
 
 
 # Блок где мы отправляем емаил автору с подвержающей ссылкой. 
@@ -177,14 +191,11 @@ def user_logged_in_receiver(request, user, **kwargs):
     global userData
     userData = user
     testUserExist = User.objects.filter(username=user)
-    print('222222222222222222', testUserExist)
-    print('333333333333333333', user.username[:8])
     if len(testUserExist) and user.username[:8] !='empty165':
         print('проверить. дважды создается юзер. соц акк и обычная регистрация')
         isAuthor = Author.objects.filter(name=User.objects.get(username=user).id) 
         print('444444444444444', isAuthor) 
         if not len(isAuthor):
-            print('11111111111111', user)
             Author.objects.create(name=User.objects.get(username=user), socialAcc=True, phone=time.time())
 
 user_logged_in.connect(user_logged_in_receiver, sender=User)
@@ -362,6 +373,9 @@ class CommentsViewSet(viewsets.ModelViewSet):
 
    serializer_class = CommentsViewSerializer
 
+
+
+
    def get_queryset(self, **kwargs):
         id =  self.request.query_params.get('id', None)
         author =  self.request.query_params.get('author', None)
@@ -440,6 +454,10 @@ class UsersViewSet(viewsets.ModelViewSet):
    queryset = User.objects.all()
    serializer_class = UsersViewSerializer
    #permission_classes=[IsAuthenticated]
+
+
+
+
 
    def get_queryset(self, **kwargs):
         id =  self.request.query_params.get('id', None)

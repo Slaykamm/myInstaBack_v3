@@ -11,4 +11,5 @@ urlpatterns = [
     path('detail/<int:pk>/', CommentsDetailView.as_view()),
     path('detail/<int:pk>/', UsersDetailView.as_view()),
     path('api/change-password/', ChangePasswordView.as_view(), name='change-password'),
+    
 ]

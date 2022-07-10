@@ -42,6 +42,7 @@ urlpatterns = [
     path('api/users/', include('storage.urls')),
     path('', include(router.urls)),
     path('accounts/', include('allauth.urls')),
+    path('accounts/', IndexView.as_view()),
     path('auth/', include('dj_rest_auth.urls')),
     path('auth/registration/', include('dj_rest_auth.registration.urls')),
     path('api/change-password/', ChangePasswordView.as_view(), name='change-password'),
