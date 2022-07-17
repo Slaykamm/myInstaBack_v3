@@ -54,12 +54,39 @@ from django.views import View
 from .tasks import printer, hello
 import math
 
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
+from django.http.response import JsonResponse, HttpResponse
+from webpush import send_user_notification
+import json
 
 class IndexView(View):
     def get(self, request):
         printer.delay(10)
         hello.delay()
         return HttpResponse('Hello!')
+
+
+@require_POST
+@csrf_exempt
+def send_push(request):
+    try:
+        body = request.body
+        data = json.loads(body)
+        print('DATAAAA222', data)
+        if 'head' not in data or 'body' not in data or 'id' not in data:
+            print('teee')
+            return JsonResponse(status=400, data={"message": "Invalid data format"})
+        user_id = data['id']
+        #user = get_object_or_404(User, pk=user_id)
+        payload = {'head': data['head'], 'body': data['body']}
+        print('PAYLOD', payload)
+        send_user_notification(user=User.objects.get(id=2), payload=payload, ttl=1000)
+
+        return JsonResponse(status=200, data={"message": "Web push successful2"})
+    except TypeError:
+        return JsonResponse(status=500, data={"message": "An error occurred1"})
 
 
 
@@ -72,15 +99,15 @@ def emailverify(request):
     clearEmail =  emailDirthy[0:emailDirthy.find('%40')]+'@'+emailDirthy[(emailDirthy.find('%40'))+3:]
     link = f'http://127.0.0.1:8000/api/auth/confimation/?id={id}&author={author}&email={clearEmail}&stamp={time.time()}'
 
-    send_mail(
-        subject='Verify email for SLN Connects Co',
-        message='Good day.\n You have received this email because someone used this email address while registration at SLN Connects WebSite\n'
-        ' If it is you and you would like to verify your email address - please click on attached link below\n'
-        f' Link is: {link}',
-        from_email='slnconnects@mail.ru',
-        recipient_list=[clearEmail],
-        fail_silently=False,
-    )
+    # send_mail(
+    #     subject='Verify email for SLN Connects Co',
+    #     message='Good day.\n You have received this email because someone used this email address while registration at SLN Connects WebSite\n'
+    #     ' If it is you and you would like to verify your email address - please click on attached link below\n'
+    #     f' Link is: {link}',
+    #     from_email='slnconnects@mail.ru',
+    #     recipient_list=[clearEmail],
+    #     fail_silently=False,
+    # )
 
     return HttpResponse({'Confirmation email was sent'}, status = 200)
 

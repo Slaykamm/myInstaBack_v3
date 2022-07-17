@@ -56,8 +56,22 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
 
-    'dj_rest_auth'
+    'dj_rest_auth',
+    'webpush',
 ]
+
+
+# WEBPUSH_SETTINGS = {
+#     "VAPID_PUBLIC_KEY": "BKPEnFvnlZW82JY8bzHf-WqDovj6rJTPiDzjrI6ETz1_ehjQ3JS1VLAuphpkYKkVYr02FIYrWEgXMfmg5DsDz4w",
+#     "VAPID_PRIVATE_KEY":"avW-TQCcf9ufrQtmWIybhg",
+#     "VAPID_ADMIN_EMAIL": "admin@example.com"
+# }
+WEBPUSH_SETTINGS = {
+   "VAPID_PUBLIC_KEY": "BKudfp0bWKz4OsDfDy8TwneP9vC8dWtTGxSDredK81BKtNC0tqLQv6duV-9uaW5uAmgfxX4-qYux5D8UxYIzuPo",
+   "VAPID_PRIVATE_KEY": "PqYeCa6_aOJ_WH3eyQu01u3namS1ZYkhBNSW5WqMfwc",
+   "VAPID_ADMIN_EMAIL": "slnconnects@mail.ru"
+}
+
 
 
 REST_FRAMEWORK = {
