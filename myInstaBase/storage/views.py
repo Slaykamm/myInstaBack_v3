@@ -99,15 +99,15 @@ def emailverify(request):
     clearEmail =  emailDirthy[0:emailDirthy.find('%40')]+'@'+emailDirthy[(emailDirthy.find('%40'))+3:]
     link = f'http://127.0.0.1:8000/api/auth/confimation/?id={id}&author={author}&email={clearEmail}&stamp={time.time()}'
 
-    # send_mail(
-    #     subject='Verify email for SLN Connects Co',
-    #     message='Good day.\n You have received this email because someone used this email address while registration at SLN Connects WebSite\n'
-    #     ' If it is you and you would like to verify your email address - please click on attached link below\n'
-    #     f' Link is: {link}',
-    #     from_email='slnconnects@mail.ru',
-    #     recipient_list=[clearEmail],
-    #     fail_silently=False,
-    # )
+    send_mail(
+        subject='Verify email for SLN Connects Co',
+        message='Good day.\n You have received this email because someone used this email address while registration at SLN Connects WebSite\n'
+        ' If it is you and you would like to verify your email address - please click on attached link below\n'
+        f' Link is: {link}',
+        from_email='slnconnects@mail.ru',
+        recipient_list=[clearEmail],
+        fail_silently=False,
+    )
 
     return HttpResponse({'Confirmation email was sent'}, status = 200)
 
